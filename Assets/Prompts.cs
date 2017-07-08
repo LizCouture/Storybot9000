@@ -4,16 +4,28 @@ using UnityEngine;
 
 public class Prompts : MonoBehaviour {
 
-	public AudioClip[] promptVocals;
+	public List<AudioClip> promptVocals;
+	public List<AudioClip> unusedPrompts;
 	public AudioClip greeting;
 	public static AudioSource audio;
 
 	void Start(){
 	 audio = GetComponent<AudioSource>();
+		for(int i=0;i<promptVocals.Count;i++){
+			unusedPrompts.Add(promptVocals[i]);
+		}
 	}
 
 	public void playRandomClip(){
-		audio.clip = promptVocals[Random.Range(0,promptVocals.Length)];
+		//audio.clip = promptVocals[Random.Range(0,promptVocals.Length)];
+		if(unusedPrompts.Count <= 0){
+			for(int i=0;i<promptVocals.Count;i++){
+				unusedPrompts.Add(promptVocals[i]);
+			}
+		}
+		int clip = Random.Range(0,unusedPrompts.Count);
+		audio.clip = unusedPrompts[clip];
+		unusedPrompts.RemoveAt(clip);
 		audio.Play();
 	}
 
